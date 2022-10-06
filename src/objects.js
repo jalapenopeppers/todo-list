@@ -62,16 +62,23 @@ const infoItemMethods = {
   set completed(newCompleted) {
     this._completed = newCompleted;
   },
+  get creationDate() {
+    return this._creationDate;
+  },
+  set creationDate(newCreationDate) {
+    this._creationDate = newCreationDate;
+  },
 }
 
 // TodoItem constructor
-function TodoItem(title, description = '', dueDate = '', priority = '', notes = '', completed = false) {
+function TodoItem({title, description = '', dueDate = '', priority = 'low', notes = '', completed = false} = {}) {
   this._title = title;
   this._description = description;
-  this._dueDate = dueDate;
+  this._dueDate = new Date(dueDate);
   this._priority = priority;
   this._notes = notes;
   this._completed = completed;
+  this._creationDate = new Date();
 
   this._todoID = '';
 }
@@ -90,13 +97,14 @@ TodoItem.prototype = Object.create(infoItemMethods, {
 });
 
 // ProjectItem constructor
-function ProjectItem(title, description = '', dueDate = '', priority = '', notes = '', completed = false) {
+function ProjectItem({title, description = '', dueDate = '', priority = 'low', notes = '', completed = false} = {}) {
   this._title = title;
   this._description = description;
-  this._dueDate = dueDate;
+  this._dueDate = new Date(dueDate);
   this._priority = priority;
   this._notes = notes;
   this._completed = completed;
+  this._creationDate = new Date();
 
   this._projID = '';
 }
@@ -114,10 +122,11 @@ ProjectItem.prototype = Object.create(infoItemMethods, {
   },
 });
 
-let todoItemObj = new TodoItem('yo', 'yo mama');
-console.log(todoItemObj.title);
+// let todoItemObj = new TodoItem('yo', 'yo mama');
+// console.log(todoItemObj.title);
 
-let projItemObj = new ProjectItem('scooby', 'doo');
-console.log(projItemObj.title);
-console.log(projItemObj.description);
-console.log(projItemObj.projID);
+// let projItemObj = new ProjectItem('scooby', 'doo');
+// console.log(projItemObj.title);
+// console.log(projItemObj.description);
+// console.log(projItemObj.projID);
+export {TodoItem, ProjectItem};
