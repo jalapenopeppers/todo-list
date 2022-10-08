@@ -1,7 +1,7 @@
 import { TodoItem, ProjectItem } from "./objects.js";
 import { compareAsc, compareDesc } from "date-fns";
 
-const InformationItemManager = (() => {
+export const InformationItemManager = (() => {
   let projectMap = new Map();
   let projectCounter = 0; // used to generate projIDs
   let todoCounter = 0; // used to generate todoIDs
