@@ -11,7 +11,8 @@
   <div class="content">
     <div class="header">
       <div class="title-logo-container">
-        Amazing title + logo
+        <img class="header-logo" src="" alt="Clipboard logo">
+        <div class="header-title">Check-It</div>
       </div>
       <div class="datetime-container">
         Friday, October 7, 4:48pm
@@ -21,28 +22,61 @@
       </div>
     </div>
     <div class="sidebar">
-      <div class="all-button">All</div>
-      <div class="today-button">Today</div>
-      <div class="this-week-button">This Week</div>
-      <div class="important-button">Important</div>
-      <div class="completed-button">Completed</div>
-      <div>
-        Projects:
-        <div class="projects-container"></div>
+      <div class="sidebar-main-buttons">
+        <div class="button all-button">All</div>
+        <div class="button today-button">Today</div>
+        <div class="button this-week-button">This Week</div>
+        <div class="button important-button">Important</div>
+        <div class="button completed-button">Completed</div>
+        <div>
+          Projects:
+          <div class="button projects-container"></div>
+        </div>
       </div>
       <div class="credits-footer">
         <div class="footer-text">Made By: Jalapenopeppers</div>
         <a class="github-link" href="https://github.com/jalapenopeppers/todo-list">
-        <img class="github-logo" src="" alt="Github Logo">
-      </a>
+          <img class="github-logo" src="" alt="Github Logo">
+        </a>
       </div>
     </div>
     <div class="main-content">
-      <div class="current-category-text"></div>
-      <div class="add-todo-button"></div>
-      <div class="todo-items-container">
-
+      <div class="main-content-top-row">
+        <div class="current-category-text">Test</div>
+        <div class="add-todo-button">
+          <img class="add-todo-button-icon" src="" alt="Add todo button">
+        </div>
       </div>
+      <table class="todo-items-container">
+        <thead class="todo-items-category-titles">
+          <th class="completed-title">Completed:</th>
+          <th class="due-date-title">Due Date:</th>
+          <th class="title-title">Title:</th>
+          <th class="priority-title">Priority:</th>
+          <th class="creation-date-title">Date Added:</th>
+        </thead>
+        <tr class="todo-item">
+          <td><input type="checkbox" class="todo-item-checkbox"></td>
+          <td class="due-date">10/9/22</td>
+          <td class="title">Eat crap ajsdqfw v wdacq af cwdsv sdv c sd</td>
+          <td class="priority priority-low">Low</td>
+          <td class="creation-date">10/8/22</td>
+        </tr>
+        <tr class="todo-item">
+          <td><input type="checkbox" class="todo-item-checkbox"></td>
+          <td class="due-date">10/9/22</td>
+          <td class="title">Eat crap</td>
+          <td class="priority priority-med">Medium</td>
+          <td class="creation-date">10/8/22</td>
+        </tr>
+        <tr class="todo-item completed">
+          <td><input type="checkbox" class="todo-item-checkbox"></td>
+          <td class="due-date">10/9/22</td>
+          <td class="title">Eat crap</td>
+          <td class="priority priority-high">High</td>
+          <td class="creation-date">10/8/22</td>
+        </tr>
+      </table>
     </div>
   </div>
 </body>
