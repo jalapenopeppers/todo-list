@@ -14,9 +14,7 @@
         <img class="header-logo" src="" alt="Clipboard logo">
         <div class="header-title">Check-It</div>
       </div>
-      <div class="datetime-container">
-        Friday, October 7, 4:48pm
-      </div>
+      <div id="header-clock" class="datetime-container"></div>
       <div class="theme-toggle-container">
         Button
       </div>
@@ -28,9 +26,29 @@
         <div class="button this-week-button">This Week</div>
         <div class="button important-button">Important</div>
         <div class="button completed-button">Completed</div>
-        <div>
-          Projects:
-          <div class="button projects-container"></div>
+        <div class="projects">
+          <div class="projects-header">
+            <div class="projects-header-text">Projects:</div>
+            <div class="add-project-button">
+              <img class="add-project-button-icon" src="" alt="Add project button">
+            </div>
+          </div>
+          <ul class="projects-container">
+            <li class="button project">Project 1
+              <div class="project-subbuttons">
+                <div class="complete-project-button">
+                  <input type="checkbox" class="complete-project-button">
+                </div>
+                <div class="edit-project-button">
+                  <img class="edit-project-button-icon" src="" alt="Edit project button">
+                </div>
+                <div class="delete-project-button">
+                  <img class="delete-project-button-icon" src="" alt="Delete project button">
+                </div>
+              </div>
+            </li>
+            <li class="button project">Project 2</li>
+          </ul>
         </div>
       </div>
       <div class="credits-footer">
@@ -55,27 +73,29 @@
           <th class="priority-title">Priority:</th>
           <th class="creation-date-title">Date Added:</th>
         </thead>
-        <tr class="todo-item">
-          <td><input type="checkbox" class="todo-item-checkbox"></td>
-          <td class="due-date">10/9/22</td>
-          <td class="title">Eat crap ajsdqfw v wdacq af cwdsv sdv c sd</td>
-          <td class="priority priority-low">Low</td>
-          <td class="creation-date">10/8/22</td>
-        </tr>
-        <tr class="todo-item">
-          <td><input type="checkbox" class="todo-item-checkbox"></td>
-          <td class="due-date">10/9/22</td>
-          <td class="title">Eat crap</td>
-          <td class="priority priority-med">Medium</td>
-          <td class="creation-date">10/8/22</td>
-        </tr>
-        <tr class="todo-item completed">
-          <td><input type="checkbox" class="todo-item-checkbox"></td>
-          <td class="due-date">10/9/22</td>
-          <td class="title">Eat crap</td>
-          <td class="priority priority-high">High</td>
-          <td class="creation-date">10/8/22</td>
-        </tr>
+        <tbody class="todo-items">
+          <tr class="todo-item">
+            <td><input type="checkbox" class="todo-item-checkbox"></td>
+            <td class="due-date">10/9/22</td>
+            <td class="title">Eat crap ajsdqfw v wdacq af cwdsv sdv c sd</td>
+            <td class="priority priority-low">Low</td>
+            <td class="creation-date">10/8/22</td>
+          </tr>
+          <tr class="todo-item">
+            <td><input type="checkbox" class="todo-item-checkbox"></td>
+            <td class="due-date">10/9/22</td>
+            <td class="title">Eat crap</td>
+            <td class="priority priority-med">Medium</td>
+            <td class="creation-date">10/8/22</td>
+          </tr>
+          <tr class="todo-item completed">
+            <td><input type="checkbox" class="todo-item-checkbox"></td>
+            <td class="due-date">10/9/22</td>
+            <td class="title">Eat crap</td>
+            <td class="priority priority-high">High</td>
+            <td class="creation-date">10/8/22</td>
+          </tr>
+        </tbody>
       </table>
     </div>
   </div>

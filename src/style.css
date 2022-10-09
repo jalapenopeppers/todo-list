@@ -29,8 +29,46 @@ img.github-logo {
   cursor: pointer;
 }
 
+input.complete-project-button {
+  width: clamp(12px, 2vw, 20px);
+  height: clamp(12px, 2vw, 20px);
+}
+div.complete-project-button {
+  width: auto;
+  height: 10px;
+}
+
+.add-project-button,
+.edit-project-button,
+.delete-project-button {
+  width: clamp(16px, 2vw, 30px);
+  height: clamp(16px, 2vw, 30px);
+  border-radius: 50%;
+  cursor: pointer;
+}
+.add-project-button {
+  border: 1px solid #cecece;
+}
+
+.add-project-button:hover {
+  /* filter: invert(1); */
+  background-color: #cecece;
+}
+
 .add-todo-button-icon {
+  /* convert to dark blue */
   filter: invert(22%) sepia(30%) saturate(3932%) hue-rotate(193deg) brightness(87%) contrast(91%);
+}
+
+.add-project-button-icon,
+.edit-project-button-icon,
+.delete-project-button-icon {
+  /* convert to grayish sidebar text */
+  filter: invert(89%) sepia(68%) saturate(0%) hue-rotate(125deg) brightness(83%) contrast(94%);
+}
+
+.add-project-button-icon:hover {
+  filter: invert(0);
 }
 
 .content {
@@ -60,6 +98,10 @@ img.github-logo {
   gap: 10px;
 }
 
+.datetime-container {
+  font-size: clamp(16px, 3vw, 30px);
+}
+
 .sidebar {
   font-size: clamp(16px, 2vw, 30px);
   padding: 10px;
@@ -80,6 +122,31 @@ img.github-logo {
 
 .button {
   cursor: pointer;
+}
+
+.projects-header {
+  display: grid;
+  grid-template-columns: repeat(2, min-content);
+  align-items: center;
+  gap: 10px;
+}
+
+ul.projects-container {
+  list-style:square inside;
+  padding: 5px 20px;
+  display: grid;
+  gap: 10px;
+}
+
+li.button.project {
+  display: grid;
+  grid-template-columns: repeat(2, auto);
+}
+
+.project-subbuttons {
+  display: grid;
+  grid-template-columns: repeat(3, auto);
+  justify-items: center;
 }
 
 .credits-footer {
@@ -140,17 +207,13 @@ table {
   text-align: center;
 }
 
-td.title {
+td {
   /* display: block; */
   /* width: 100%; */
   max-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-}
-
-td {
-  border: 0;
 }
 
 .todo-item-checkbox {

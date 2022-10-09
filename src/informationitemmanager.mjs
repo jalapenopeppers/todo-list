@@ -1,5 +1,6 @@
-import { TodoItem, ProjectItem } from "./objects.js";
-import { compareAsc, compareDesc } from "date-fns";
+import { TodoItem, ProjectItem } from "./objects.mjs";
+import { compareAsc, compareDesc, isThisWeek, isToday } from "date-fns";
+import { DisplayHandler } from './displayhandler.mjs';
 
 export const InformationItemManager = (() => {
   let projectMap = new Map();
@@ -69,15 +70,17 @@ export const InformationItemManager = (() => {
     } else if (todoCategoryTypeStr === 'due-today') {
       projectMap.forEach((value1) => {
         value1.get('todoItems').forEach((value2) => {
-          // IMPLEMENT WITH TIME LIBRARY
-          todoItemsArray.push(value2);
+          if (isToday(value2.dueDate)) {
+            todoItemsArray.push(value2);
+          }
         });
       });
     } else if (todoCategoryTypeStr === 'due-this-week') {
       projectMap.forEach((value1) => {
         value1.get('todoItems').forEach((value2) => {
-          // IMPLEMENT WITH TIME LIBRARY
-          todoItemsArray.push(value2);
+          if (isThisWeek(value2.dueDate)) {
+            todoItemsArray.push(value2);
+          }
         });
       });
     } else if (todoCategoryTypeStr === 'low-priority') {
@@ -168,20 +171,21 @@ export const InformationItemManager = (() => {
   };
 })();
 
-InformationItemManager.createProject(new ProjectItem({title:'wash dishes', description:'do it fast'}));
-InformationItemManager.createProject(new ProjectItem({title:'move to me'}));
-let todoObj = new TodoItem({title:'eat crap', dueDate:'2022-10-10T00:00', priority: 'med'});
-todoObj.creationDate = new Date(1900, 1, 1);
-let todoObj1 = new TodoItem({title:'eat crap1', dueDate:'2022-10-07T00:00', priority: 'high'});
-todoObj1.creationDate = new Date(1950, 1, 1);
-let todoObj2 = new TodoItem({title:'eat crap2', dueDate:'2022-10-02T00:00',});
-todoObj2.creationDate = new Date(2019, 1, 1);
-InformationItemManager.createTodo('proj0', todoObj);
-InformationItemManager.createTodo('proj0', todoObj1);
-InformationItemManager.createTodo('proj0', todoObj2);
-InformationItemManager.moveTodo('todo0', 'proj1');
-console.log(InformationItemManager.getProjects()[0].description);
+// InformationItemManager.createProject(new ProjectItem({title:'wash dishes', description:'do it fast'}));
+// InformationItemManager.createProject(new ProjectItem({title:'move to me'}));
+// let todoObj = new TodoItem({title:'eat crap', dueDate:'2022-10-10T00:00', priority: 'med'});
+// todoObj.creationDate = new Date(1900, 1, 1);
+// let todoObj1 = new TodoItem({title:'eat crap1', dueDate:'2022-10-07T00:00', priority: 'high'});
+// todoObj1.creationDate = new Date(1950, 1, 1);
+// let todoObj2 = new TodoItem({title:'eat crap2', dueDate:'2022-10-02T00:00',});
+// todoObj2.creationDate = new Date(2019, 1, 1);
+// InformationItemManager.createTodo('proj0', todoObj);
+// InformationItemManager.createTodo('proj0', todoObj1);
+// InformationItemManager.createTodo('proj0', todoObj2);
+// InformationItemManager.moveTodo('todo0', 'proj1');
+// console.log(InformationItemManager.getProjects()[0].description);
 
-for (let todo of InformationItemManager.getTodos('all', 'due-date-latest')) {
-  console.log(todo.dueDate);
-}
+// for (let todo of InformationItemManager.getTodos('all', 'due-date-latest')) {
+//   console.log(todo.dueDate);
+// }
+// DisplayHandler.displayTodos('proj0');
