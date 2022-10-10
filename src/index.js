@@ -6,6 +6,7 @@ import CheckListLogo from './icons/clipboard-list.svg';
 import AddIcon from './icons/plus.svg';
 import EditIcon from './icons/pencil-outline.svg'
 import DeleteIcon from './icons/trash-can-outline.svg'
+import MoveIcon from './icons/folder-move-outline.svg';
 
 // temp 
 import { DisplayHandler} from './displayhandler.mjs';
@@ -28,6 +29,10 @@ const editProjectElem = document.querySelector('.edit-project-button-icon');
 editProjectElem.setAttribute('src', EditIcon);
 const deleteProjectElem = document.querySelector('.delete-project-button-icon');
 deleteProjectElem.setAttribute('src', DeleteIcon);
+const moveTodoElem = document.querySelector('.todo-item-edit-button-icon');
+moveTodoElem.setAttribute('src', MoveIcon);
+const deleteTodoElem = document.querySelector('.todo-item-delete-button-icon');
+deleteTodoElem.setAttribute('src', DeleteIcon);
 
 // Clock functionality
 const clockElement = document.querySelector('.datetime-container');

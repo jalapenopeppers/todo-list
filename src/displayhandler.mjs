@@ -3,6 +3,10 @@ import { format } from "date-fns";
 
 export const DisplayHandler = (() => {
   const projectContainerElem = document.querySelector('.projects-container');
+  const updateCurrentCategory = (event) => {
+    let currentCategory = document.querySelector('div.current-category-text');
+    currentCategory.textContent = event.target.textContent;
+  };
 
   const displayTodos = (todoCategoryTypeStr, todoSortStr) => {
     let todoItemsTbody = document.querySelector('tbody.todo-items');
@@ -69,18 +73,23 @@ export const DisplayHandler = (() => {
   const attachStaticEventHandlers = () => {
     let allButton = document.querySelector('.button.all-button');
     allButton.addEventListener('click', (e) => {displayTodos('all', 'due-date-soonest');});
+    allButton.addEventListener('click', (e) => {updateCurrentCategory(e)});
   
     let todayButton = document.querySelector('.button.today-button');
     todayButton.addEventListener('click', (e) => {displayTodos('due-today', 'due-date-soonest');});
+    todayButton.addEventListener('click', (e) => {updateCurrentCategory(e)});
 
     let thisWeekButton = document.querySelector('.button.this-week-button');
     thisWeekButton.addEventListener('click', (e) => {displayTodos('due-this-week', 'due-date-soonest');});
+    thisWeekButton.addEventListener('click', (e) => {updateCurrentCategory(e)});
 
     let importantButton = document.querySelector('.button.important-button');
     importantButton.addEventListener('click', (e) => {displayTodos('high-priority', 'due-date-soonest');});
+    importantButton.addEventListener('click', (e) => {updateCurrentCategory(e)});
 
     let completedButton = document.querySelector('.button.completed-button');
     completedButton.addEventListener('click', (e) => {displayTodos('completed', 'due-date-soonest');});
+    completedButton.addEventListener('click', (e) => {updateCurrentCategory(e)});
   }
 
   return {
