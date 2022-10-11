@@ -40,8 +40,9 @@ div.create-edit-form-placement-grid {
   z-index: 1;
 }
 div.create-edit-form-container {
-  width: 50vw;
-  height: 50vh;
+  width: 30vw;
+  height: min-content;
+  padding: 30px;
   background-color: var(--background-color-grey);
   border-radius: 10px;
   box-shadow: 0 0 13px black;
@@ -49,6 +50,52 @@ div.create-edit-form-container {
 }
 form {
   display: grid;
+  gap: 20px;
+}
+legend.form-title {
+  font-size: clamp(16px, 2vw, 30px);
+  font-weight: bold;
+}
+label.form-section {
+  display: grid;
+  grid-template-rows: repeat(2, auto);
+  gap: 10px;
+}
+form.create-edit-form input,
+form.create-edit-form select,
+form.create-edit-form textarea {
+  padding: 5px;
+  background-color: rgb(255, 255, 255);
+  border-radius: 5px;
+  border: 0px;
+}
+form.create-edit-form textarea {
+  resize: vertical;
+}
+div.form-buttons-container {
+  display: grid;
+  grid-template-columns: repeat(2, min-content);
+  justify-content: center;
+  gap: 30px;
+}
+button.cancel-form-button,
+button.submit-form-button {
+  width: min-content;
+  padding: 5px 10px;
+  font-weight: bold;
+  color: white;
+  background-color: rgb(46, 146, 44);
+  border: 0px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: 0.1s;
+}
+button.cancel-form-button {
+  background-color: rgb(107, 31, 31);
+}
+button.cancel-form-button:active,
+button.submit-form-button:active {
+  scale: 0.9;
 }
 
 .add-todo-button {

@@ -11,29 +11,35 @@
   <div class="content">
     <div class="create-edit-form-placement-grid">
       <div class="create-edit-form-container">
-        <form>
-          <label for="title">Title:</label>
-          <input type="text" id="title">
-          <label for="description">Description:
+        <form class="create-edit-form">
+          <legend class="form-title">Create Project</legend>
+          <label for="title" class="form-section">Title: *
+            <input type="text" id="title" required>
+          </label>
+          <label for="description" class="form-section">Description:
             <input type="text" id="description">
           </label>
-          <label for="due-date">Due Date:
+          <label for="due-date" class="form-section">Due Date:
             <input type="datetime-local" id="due-date">
           </label>
-          <label for="priority">Priority:
+          <label for="priority" class="form-section">Priority:
             <select name="priority" id="priority">
               <option value="low">Low</option>
               <option value="med">Medium</option>
               <option value="high">High</option>
             </select>
           </label>
-          <label for="notes">Notes:
+          <label for="notes" class="form-section">Notes:
             <textarea>
             </textarea>
           </label>
           <label for="completed">Completed:
             <input type="checkbox" id="completed">
           </label>
+          <div class="form-buttons-container">
+            <button type="button" class="cancel-form-button">Cancel</button>
+            <button class="submit-form-button">Create</button>
+          </div>
         </form>
       </div>
     </div>
