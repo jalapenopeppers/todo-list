@@ -23,7 +23,7 @@ export const DisplayHandler = (() => {
     let projNotes = document.querySelector('form.create-edit-form textarea#notes');
     projNotes.value = projectObj.notes;
     let projCompleted = document.querySelector('form.create-edit-form input#completed');
-    projCompleted.value = projectObj.completed;
+    projCompleted.checked = projectObj.completed;
   };
   const _displayForm = (formStr, projID = '') => {
     let formPlacementGrid = document.querySelector('div.create-edit-form-placement-grid');
@@ -35,19 +35,33 @@ export const DisplayHandler = (() => {
       moveTodoForm.style.display = 'none';
       let createEditFormTitle = document.querySelector('form.create-edit-form>legend.form-title');
       createEditFormTitle.textContent = 'Create Project';
+      let requiredProjTitleInput = document.querySelector('form.create-edit-form input#title');
+      requiredProjTitleInput.required = true;
+      let submitFormButton = document.querySelector('form.create-edit-form button.submit-form-button');
+      submitFormButton.textContent = 'Create';
+      submitFormButton.dataset.submittype = 'create';
+      submitFormButton.dataset.editprojid = '';
     } else if (formStr === 'edit project form' && projID !== '') {
       formPlacementGrid.style.display = 'grid';
       createEditForm.style.display = 'grid';
       moveTodoForm.style.display = 'none';
       let createEditFormTitle = document.querySelector('form.create-edit-form>legend.form-title');
       createEditFormTitle.textContent = 'Edit Project';
+      let requiredProjTitleInput = document.querySelector('form.create-edit-form input#title');
+      requiredProjTitleInput.required = true;
       /* autofill with project info */
       _autofillProjectInfo(projID);
+      let submitFormButton = document.querySelector('form.create-edit-form button.submit-form-button');
+      submitFormButton.textContent = 'Edit';
+      submitFormButton.dataset.submittype = 'edit';
+      submitFormButton.dataset.editprojid = projID; // For use by submit button event handler
     } else if (formStr === 'move todo form') {
       formPlacementGrid.style.display = 'grid';
       createEditForm.style.display = 'none';
       moveTodoForm.style.display = 'grid';
     } else if (formStr === 'none') {
+      let requiredProjTitleInput = document.querySelector('form.create-edit-form input#title');
+      requiredProjTitleInput.required = false; // Doing this avoids a browser error when it tries to validate a hidden element
       formPlacementGrid.style.display = 'none';
     }
   };
@@ -70,6 +84,7 @@ export const DisplayHandler = (() => {
     projectLiElem.id = projectItemObj.projID;
     projectLiElem.dataset.projid = projectItemObj.projID;
     let checkedStr = projectItemObj.completed === true ? ' checked' : '';
+    if (checkedStr) {projectLiElem.classList.add('completed')};
     projectLiElem.innerHTML = `
       <div class="button project-text">${projectItemObj.title}</div>
       <div class="project-subbuttons">
@@ -84,13 +99,12 @@ export const DisplayHandler = (() => {
         </div>
       </div>
     `;
-    console.log(projectItemObj.completed);
 
     // Append item to DOM, evaluates innerHTML to objects
     let appendChildPromise = new Promise((onSuccess) => {
       projectsContainerElem.appendChild(projectLiElem);
 
-      onSuccess();
+      onSuccess(); // dummy function - does nothing
     });
 
     appendChildPromise.then(() => {
@@ -106,10 +120,13 @@ export const DisplayHandler = (() => {
         }
       });
       let editProjectButton = document.querySelector(`li#${projectItemObj.projID} div.edit-project-button`);
-        // ADD FUNCTIONALITY
+      editProjectButton.addEventListener('click', (e) => {
+        let projID = e.currentTarget.parentNode.parentNode.dataset.projid;
+        _displayForm('edit project form', projID);
+      });
       let deleteProjectButton = document.querySelector(`li#${projectItemObj.projID} div.delete-project-button`);
       deleteProjectButton.addEventListener('click', (e) => {
-        let projID = e.currentTarget.parentNode.parentNode.dataset.projid
+        let projID = e.currentTarget.parentNode.parentNode.dataset.projid;
         deleteProject(projID);
         console.log(InformationItemManager.getProjects());
       });
@@ -209,17 +226,40 @@ export const DisplayHandler = (() => {
       let projPriority = document.querySelector('form.create-edit-form select#priority').value;
       let projNotes = document.querySelector('form.create-edit-form textarea#notes').value;
       let projCompleted = document.querySelector('form.create-edit-form input#completed').checked;
-      let projItemObj = new ProjectItem({
-        title:projTitle,
-        description:projDescription,
-        dueDate:projDueDate,
-        priority:projPriority,
-        notes:projNotes,
-        completed:projCompleted,
-      });
-      /* CAUTION: Editing newProjItemObj after next line will edit its actual value in the projectMap */
-      let newProjItemObj = InformationItemManager.createProject(projItemObj);
-      createProject(newProjItemObj);
+      if (createEditFormSubmitButton.dataset.submittype === 'create') {
+        let projItemObj = new ProjectItem({
+          title:projTitle,
+          description:projDescription,
+          dueDate:projDueDate,
+          priority:projPriority,
+          notes:projNotes,
+          completed:projCompleted,
+        });
+        /* CAUTION: Editing newProjItemObj after next line will edit its actual value in the projectMap */
+        let newProjItemObj = InformationItemManager.createProject(projItemObj);
+        createProject(newProjItemObj);
+      } else if (createEditFormSubmitButton.dataset.submittype === 'edit') {
+        let projID = e.currentTarget.dataset.editprojid;
+        let existingProjItemObj = InformationItemManager.getProject(projID);
+        existingProjItemObj.title = projTitle;
+        existingProjItemObj.description = projDescription;
+        existingProjItemObj.dueDate = projDueDate;
+        existingProjItemObj.priority = projPriority;
+        existingProjItemObj.notes = projNotes;
+        existingProjItemObj.completed = projCompleted;
+        if (projCompleted) {
+          let projectLiElem = document.querySelector(`li#${projID}.project`);
+          projectLiElem.classList.add('completed');
+          let projectCompletedCheckbox = document.querySelector(`li#${projID}.project input.complete-project-button`);
+          projectCompletedCheckbox.checked = true;
+        } else {
+          let projectLiElem = document.querySelector(`li#${projID}.project`);
+          projectLiElem.classList.remove('completed');
+          let projectCompletedCheckbox = document.querySelector(`li#${projID}.project input.complete-project-button`);
+          projectCompletedCheckbox.checked = false;
+        }
+      }
+      
       let createEditForm = document.querySelector('form.create-edit-form');
       createEditForm.reset(); // resets form to default values
     });
