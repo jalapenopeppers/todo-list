@@ -12,6 +12,8 @@
 
 :root {
   --background-color-grey: rgb(232, 232, 232);
+  --background-color-item-hover: rgb(196, 196, 196);
+  --background-color-item-selected: rgb(140, 140, 140);
 }
 
 img.header-logo {
@@ -28,6 +30,7 @@ div.content {
   position: relative;
 }
 div.create-edit-form-placement-grid {
+  visibility: visible;
   width: 100%;
   height: 100%;
   /* top: 25%;
@@ -42,6 +45,7 @@ div.create-edit-form-placement-grid {
 div.create-edit-form-container {
   width: 30vw;
   height: min-content;
+  min-width: min-content;
   padding: 30px;
   background-color: var(--background-color-grey);
   border-radius: 10px;
@@ -52,7 +56,12 @@ form {
   display: grid;
   gap: 20px;
 }
-legend.form-title {
+div.create-edit-form-placement-grid {
+  display: none;
+  /*TEMPORARY VALUE*/
+}
+legend.form-title,
+h1.form-subtitle {
   font-size: clamp(16px, 2vw, 30px);
   font-weight: bold;
 }
@@ -63,7 +72,8 @@ label.form-section {
 }
 form.create-edit-form input,
 form.create-edit-form select,
-form.create-edit-form textarea {
+form.create-edit-form textarea,
+select.move-todo-projects {
   padding: 5px;
   background-color: rgb(255, 255, 255);
   border-radius: 5px;
@@ -96,6 +106,22 @@ button.cancel-form-button {
 button.cancel-form-button:active,
 button.submit-form-button:active {
   scale: 0.9;
+}
+
+/* Move Todo Form */
+div.todo-preview,
+div.move-todo-from-project,
+div.move-todo-projects-container {
+  margin-left: 30px;
+}
+li.move-todo-project {
+  cursor: pointer;
+}
+li.move-todo-project:hover {
+  background-color: var(--background-color-item-hover);
+}
+li.move-todo-project.selected {
+  background-color: var(--background-color-item-selected);
 }
 
 .add-todo-button {
@@ -318,12 +344,12 @@ td.priority-high {color: rgb(174, 28, 28)}
 /* Strikeout for completed tasks */
 .todo-item.completed {
   position: relative;
-  background-color: rgb(140, 140, 140);
+  background-color: var(--background-color-item-selected);
   text-decoration: line-through;
 }
 
 .todo-item:hover {
-  background-color: rgb(196, 196, 196);
+  background-color: var(--background-color-item-hover);
   cursor: pointer;
 }
 
