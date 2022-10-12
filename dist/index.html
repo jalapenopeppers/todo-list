@@ -14,13 +14,13 @@
         <form class="create-edit-form">
           <legend class="form-title">Create Project</legend>
           <label for="title" class="form-section">Title: *
-            <input type="text" id="title" required>
+            <input type="text" id="title" name="title" required>
           </label>
           <label for="description" class="form-section">Description:
-            <input type="text" id="description">
+            <input type="text" id="description" name="description">
           </label>
           <label for="due-date" class="form-section">Due Date:
-            <input type="datetime-local" id="due-date">
+            <input type="datetime-local" id="due-date" name="due-date">
           </label>
           <label for="priority" class="form-section">Priority:
             <select name="priority" id="priority">
@@ -30,11 +30,11 @@
             </select>
           </label>
           <label for="notes" class="form-section">Notes:
-            <textarea>
+            <textarea id="notes">
             </textarea>
           </label>
           <label for="completed">Completed:
-            <input type="checkbox" id="completed">
+            <input type="checkbox" id="completed" name="completed">
           </label>
           <div class="form-buttons-container">
             <button type="button" class="cancel-form-button">Cancel</button>
@@ -64,7 +64,7 @@
           </div>
           <div class="form-buttons-container">
             <button type="button" class="cancel-form-button">Cancel</button>
-            <button class="submit-form-button">Create</button>
+            <button class="submit-form-button">Submit Changes</button>
           </div>
         </form>
       </div>

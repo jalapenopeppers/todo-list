@@ -1,13 +1,124 @@
 import { InformationItemManager } from "./informationitemmanager.mjs";
 import { format } from "date-fns";
+import { TodoItem, ProjectItem } from "./objects.mjs"; 
+import EditIcon from './icons/pencil-outline.svg'
+import DeleteIcon from './icons/trash-can-outline.svg'
 
 export const DisplayHandler = (() => {
-  const projectContainerElem = document.querySelector('.projects-container');
-  const updateCurrentCategory = (event) => {
+  const _projectContainerElem = document.querySelector('.projects-container');
+  const _updateCurrentCategory = (event) => {
     let currentCategory = document.querySelector('div.current-category-text');
     currentCategory.textContent = event.target.textContent;
   };
+  const _autofillProjectInfo = (projID) => {
+    let projectObj = InformationItemManager.getProject(projID);
+    let projTitle = document.querySelector('form.create-edit-form input#title');
+    projTitle.value = projectObj.title;
+    let projDescription = document.querySelector('form.create-edit-form input#description');
+    projDescription.value = projectObj.description;
+    let projDueDate = document.querySelector('form.create-edit-form input#due-date');
+    projDueDate.value = projectObj.dueDate;
+    let projPriority = document.querySelector('form.create-edit-form select#priority');
+    projPriority.value = projectObj.priority;
+    let projNotes = document.querySelector('form.create-edit-form textarea#notes');
+    projNotes.value = projectObj.notes;
+    let projCompleted = document.querySelector('form.create-edit-form input#completed');
+    projCompleted.value = projectObj.completed;
+  };
+  const _displayForm = (formStr, projID = '') => {
+    let formPlacementGrid = document.querySelector('div.create-edit-form-placement-grid');
+    let createEditForm = document.querySelector('form.create-edit-form');
+    let moveTodoForm = document.querySelector('form.move-todo-form');
+    if (formStr === 'create project form') {
+      formPlacementGrid.style.display = 'grid';
+      createEditForm.style.display = 'grid';
+      moveTodoForm.style.display = 'none';
+      let createEditFormTitle = document.querySelector('form.create-edit-form>legend.form-title');
+      createEditFormTitle.textContent = 'Create Project';
+    } else if (formStr === 'edit project form' && projID !== '') {
+      formPlacementGrid.style.display = 'grid';
+      createEditForm.style.display = 'grid';
+      moveTodoForm.style.display = 'none';
+      let createEditFormTitle = document.querySelector('form.create-edit-form>legend.form-title');
+      createEditFormTitle.textContent = 'Edit Project';
+      /* autofill with project info */
+      _autofillProjectInfo(projID);
+    } else if (formStr === 'move todo form') {
+      formPlacementGrid.style.display = 'grid';
+      createEditForm.style.display = 'none';
+      moveTodoForm.style.display = 'grid';
+    } else if (formStr === 'none') {
+      formPlacementGrid.style.display = 'none';
+    }
+  };
 
+  const displayProjects = () => {
+    _projectContainerElem.innerHTML = '';
+    let projectsArray = InformationItemManager.getProjects();
+    console.log(projectsArray);
+    for (let projectItem of projectsArray) {
+      let projectElem = document.createElement('li');
+      projectElem.className = 'button project';
+      projectElem.textContent = projectItem.title;
+      _projectContainerElem.appendChild(projectElem);
+    }
+  };
+  const createProject = (projectItemObj) => {
+    let projectsContainerElem = document.querySelector('ul.projects-container');
+    let projectLiElem = document.createElement('li');
+    projectLiElem.className = 'project';
+    projectLiElem.id = projectItemObj.projID;
+    projectLiElem.dataset.projid = projectItemObj.projID;
+    let checkedStr = projectItemObj.completed === true ? ' checked' : '';
+    projectLiElem.innerHTML = `
+      <div class="button project-text">${projectItemObj.title}</div>
+      <div class="project-subbuttons">
+        <div class="complete-project-button">
+          <input type="checkbox" class="complete-project-button"${checkedStr}>
+        </div>
+        <div class="edit-project-button">
+          <img class="edit-project-button-icon" src="${EditIcon}" alt="Edit project button">
+        </div>
+        <div class="delete-project-button">
+          <img class="delete-project-button-icon" src="${DeleteIcon}" alt="Delete project button">
+        </div>
+      </div>
+    `;
+    console.log(projectItemObj.completed);
+
+    // Append item to DOM, evaluates innerHTML to objects
+    let appendChildPromise = new Promise((onSuccess) => {
+      projectsContainerElem.appendChild(projectLiElem);
+
+      onSuccess();
+    });
+
+    appendChildPromise.then(() => {
+      let completeProjectButton = document.querySelector(`li#${projectItemObj.projID} input.complete-project-button`);
+      completeProjectButton.addEventListener('click', (e) => {
+        let projID = e.currentTarget.parentNode.parentNode.parentNode.dataset.projid;
+        let projectObject = InformationItemManager.getProject(projID);
+        projectObject.completed = e.currentTarget.checked;
+        if (projectObject.completed) {
+          e.currentTarget.parentNode.parentNode.parentNode.classList.add('completed');
+        } else {
+          e.currentTarget.parentNode.parentNode.parentNode.classList.remove('completed');
+        }
+      });
+      let editProjectButton = document.querySelector(`li#${projectItemObj.projID} div.edit-project-button`);
+        // ADD FUNCTIONALITY
+      let deleteProjectButton = document.querySelector(`li#${projectItemObj.projID} div.delete-project-button`);
+      deleteProjectButton.addEventListener('click', (e) => {
+        let projID = e.currentTarget.parentNode.parentNode.dataset.projid
+        deleteProject(projID);
+        console.log(InformationItemManager.getProjects());
+      });
+    });
+  };
+  const deleteProject = (projID) => {
+    document.querySelector(`li#${projID}`).remove(); // Remove project from DOM
+    InformationItemManager.deleteProject(projID); // Remove project from projects map
+  };
   const displayTodos = (todoCategoryTypeStr, todoSortStr) => {
     let todoItemsTbody = document.querySelector('tbody.todo-items');
     todoItemsTbody.innerHTML = '';
@@ -55,17 +166,6 @@ export const DisplayHandler = (() => {
       todoItemsTbody.appendChild(trElem);
     }
   };
-  const displayProjects = () => {
-    projectContainerElem.innerHTML = '';
-    let projectsArray = InformationItemManager.getProjects();
-    console.log(projectsArray);
-    for (let projectItem of projectsArray) {
-      let projectElem = document.createElement('li');
-      projectElem.className = 'button project';
-      projectElem.textContent = projectItem.title;
-      projectContainerElem.appendChild(projectElem);
-    }
-  };
   /*
     Attaches event handlers to unchanging buttons like 'all'
     This should only need to be run once.
@@ -73,23 +173,63 @@ export const DisplayHandler = (() => {
   const attachStaticEventHandlers = () => {
     let allButton = document.querySelector('.button.all-button');
     allButton.addEventListener('click', (e) => {displayTodos('all', 'due-date-soonest');});
-    allButton.addEventListener('click', (e) => {updateCurrentCategory(e)});
+    allButton.addEventListener('click', (e) => {_updateCurrentCategory(e)});
   
     let todayButton = document.querySelector('.button.today-button');
     todayButton.addEventListener('click', (e) => {displayTodos('due-today', 'due-date-soonest');});
-    todayButton.addEventListener('click', (e) => {updateCurrentCategory(e)});
+    todayButton.addEventListener('click', (e) => {_updateCurrentCategory(e)});
 
     let thisWeekButton = document.querySelector('.button.this-week-button');
     thisWeekButton.addEventListener('click', (e) => {displayTodos('due-this-week', 'due-date-soonest');});
-    thisWeekButton.addEventListener('click', (e) => {updateCurrentCategory(e)});
+    thisWeekButton.addEventListener('click', (e) => {_updateCurrentCategory(e)});
 
     let importantButton = document.querySelector('.button.important-button');
     importantButton.addEventListener('click', (e) => {displayTodos('high-priority', 'due-date-soonest');});
-    importantButton.addEventListener('click', (e) => {updateCurrentCategory(e)});
+    importantButton.addEventListener('click', (e) => {_updateCurrentCategory(e)});
 
     let completedButton = document.querySelector('.button.completed-button');
     completedButton.addEventListener('click', (e) => {displayTodos('completed', 'due-date-soonest');});
-    completedButton.addEventListener('click', (e) => {updateCurrentCategory(e)});
+    completedButton.addEventListener('click', (e) => {_updateCurrentCategory(e)});
+
+    let addProjectButton = document.querySelector('div.projects-header>div.add-project-button');
+    addProjectButton.addEventListener('click', (e) => {_displayForm('create project form')});
+
+    let createEditFormCancelButton = document.querySelector('form.create-edit-form button.cancel-form-button');
+    createEditFormCancelButton.addEventListener('click', (e) => {
+      _displayForm('none');
+      let createEditForm = document.querySelector('form.create-edit-form');
+      createEditForm.reset(); // resets form to default values
+    });
+    let createEditFormSubmitButton = document.querySelector('form.create-edit-form button.submit-form-button');
+    createEditFormSubmitButton.addEventListener('click', (e) => {
+      _displayForm('none');
+      let projTitle = document.querySelector('form.create-edit-form input#title').value;
+      let projDescription = document.querySelector('form.create-edit-form input#description').value;
+      let projDueDate = document.querySelector('form.create-edit-form input#due-date').value;
+      let projPriority = document.querySelector('form.create-edit-form select#priority').value;
+      let projNotes = document.querySelector('form.create-edit-form textarea#notes').value;
+      let projCompleted = document.querySelector('form.create-edit-form input#completed').checked;
+      let projItemObj = new ProjectItem({
+        title:projTitle,
+        description:projDescription,
+        dueDate:projDueDate,
+        priority:projPriority,
+        notes:projNotes,
+        completed:projCompleted,
+      });
+      /* CAUTION: Editing newProjItemObj after next line will edit its actual value in the projectMap */
+      let newProjItemObj = InformationItemManager.createProject(projItemObj);
+      createProject(newProjItemObj);
+      let createEditForm = document.querySelector('form.create-edit-form');
+      createEditForm.reset(); // resets form to default values
+    });
+
+    let moveTodoFormCancelButton = document.querySelector('form.move-todo-form button.cancel-form-button');
+    moveTodoFormCancelButton.addEventListener('click', (e) => {
+      _displayForm('none');
+      let moveTodoForm = document.querySelector('form.move-todo-form');
+      moveTodoForm.reset(); // resets form to default values
+    });
   }
 
   return {

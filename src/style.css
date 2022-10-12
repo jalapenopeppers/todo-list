@@ -249,9 +249,25 @@ ul.projects-container {
   gap: 10px;
 }
 
+/* Style projects in the sidebar */
 li.project {
+  position: relative;
   display: grid;
-  grid-template-columns: repeat(2, auto);
+  grid-template-columns: 2fr 1fr;
+  gap: 10px;
+}
+li.project>div.project-text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+li.project.completed {
+  text-decoration: line-through;
+}
+li.project.completed::before {
+  position: absolute;
+  content: '✓';
+  left: -2rem;
 }
 
 .project-subbuttons {

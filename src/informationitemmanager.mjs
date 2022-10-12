@@ -15,6 +15,7 @@ export const InformationItemManager = (() => {
     singleProjectMap.set('project', projectItem);
     singleProjectMap.set('todoItems', new Map());
     projectMap.set(projectItem.projID, singleProjectMap);
+    return projectItem;
   };
   const deleteProject = (projID) => {
     projectMap.delete(projID);
@@ -27,6 +28,14 @@ export const InformationItemManager = (() => {
       projectObjArray.push(projectEntry[1].get('project'));
     }
     return projectObjArray;
+  };
+  const getProject = (projIDArg) => {
+    let projectObjArray = getProjects();
+    for (let projectObj of projectObjArray) {
+      if (projectObj.projID === projIDArg) {
+        return projectObj;
+      }
+    }
   };
   const createTodo = (projID, todoItem) => {
     todoItem.todoID = 'todo' + todoCounter;
@@ -164,6 +173,7 @@ export const InformationItemManager = (() => {
     createProject,
     deleteProject,
     getProjects,
+    getProject,
     createTodo,
     deleteTodo,
     moveTodo,
