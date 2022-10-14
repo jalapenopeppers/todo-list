@@ -171,6 +171,18 @@ export const InformationItemManager = (() => {
 
     return todoItemsArray;
   };
+  const getTodo = (todoID) => {
+    let todoObj = {};
+    projectMap.forEach((value, key) => {
+      todoObj = value.get('todoItems').get(todoID);
+      if (todoObj !== undefined) {
+        if (todoObj.todoID === todoID) {
+          return undefined; // normal return value for .forEach
+        };
+      };
+    });
+    return todoObj;
+  };
 
   return {
     createProject,
@@ -181,6 +193,7 @@ export const InformationItemManager = (() => {
     deleteTodo,
     moveTodo,
     getTodos,
+    getTodo,
   };
 })();
 

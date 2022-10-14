@@ -369,7 +369,7 @@ td.priority-high {color: rgb(174, 28, 28)}
   cursor: pointer;
 }
 
-.todo-item-edit-button-icon,
+.todo-item-move-button-icon,
 .todo-item-delete-button-icon {
   height: clamp(16px, 2vw, 25px);
   width: clamp(16px, 2vw, 25px);

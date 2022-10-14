@@ -3,6 +3,7 @@ import { format } from 'date-fns';
 import { TodoItem, ProjectItem } from "./objects.mjs"; 
 import EditIcon from './icons/pencil-outline.svg'
 import DeleteIcon from './icons/trash-can-outline.svg'
+import MoveIcon from './icons/folder-move-outline.svg';
 
 export const DisplayHandler = (() => {
   const _projectContainerElem = document.querySelector('.projects-container');
@@ -24,6 +25,22 @@ export const DisplayHandler = (() => {
     projNotes.value = projectObj.notes;
     let projCompleted = document.querySelector('form.create-edit-form input#completed');
     projCompleted.checked = projectObj.completed;
+  };
+  const _autofillTodoInfo = (todoID) => {
+    let todoObj = InformationItemManager.getTodo(todoID);
+    let todoTitle = document.querySelector('form.create-edit-form input#title');
+    todoTitle.value = todoObj.title;
+    let todoDescription = document.querySelector('form.create-edit-form input#description');
+    todoDescription.value = todoObj.description;
+    let todoDueDate = document.querySelector('form.create-edit-form input#due-date');
+    console.log(todoObj.dueDate.toString());
+    todoDueDate.value = format(todoObj.dueDate, 'yyyy-MM-dd') + 'T' + format(todoObj.dueDate, 'HH:mm');
+    let todoPriority = document.querySelector('form.create-edit-form select#priority');
+    todoPriority.value = todoObj.priority;
+    let todoNotes = document.querySelector('form.create-edit-form textarea#notes');
+    todoNotes.value = todoObj.notes;
+    let todoCompleted = document.querySelector('form.create-edit-form input#completed');
+    todoCompleted.checked = todoObj.completed;
   };
   const _configureForm = ({
     formStr, 
@@ -201,6 +218,11 @@ export const DisplayHandler = (() => {
     for (let todoItem of todosArray) {
       let trElem = document.createElement('tr');
       trElem.className = 'todo-item';
+      trElem.dataset.todoid = todoItem.todoID;
+      trElem.addEventListener('click', (e) => {
+        _displayForm({formStr:'edit todo form',projID:todoItem.parentProjID,todoID:todoItem.todoID});
+        _autofillTodoInfo(todoItem.todoID);
+      });
 
       let tdCheckBoxElem = document.createElement('td');
       let inputCheckBoxElem = document.createElement('input');
@@ -236,6 +258,26 @@ export const DisplayHandler = (() => {
       tdCreationDateElem.textContent = format(todoItem.creationDate, 'L/d/yy');;
       tdCreationDateElem.classList.add('creation-date');
       trElem.appendChild(tdCreationDateElem);
+
+      let tdMoveButtonElem = document.createElement('td');
+      tdMoveButtonElem.classList.add('todo-item-move-button');
+      tdMoveButtonElem.innerHTML = `
+        <img class="todo-item-move-button-icon" src="${MoveIcon}" alt="Move todo button">
+      `;
+      tdMoveButtonElem.addEventListener('click', (e) => {
+        // CONTINUE
+      });
+      trElem.appendChild(tdMoveButtonElem);
+
+      let tdDeleteButtonElem = document.createElement('td');
+      tdDeleteButtonElem.classList.add('todo-item-delete-button');
+      tdDeleteButtonElem.innerHTML = `
+        <img class="todo-item-delete-button-icon" src="${DeleteIcon}" alt="Delete todo button">
+      `;
+      tdDeleteButtonElem.addEventListener('click', (e) => {
+        // CONTINUE
+      });
+      trElem.appendChild(tdDeleteButtonElem);
 
       todoItemsTbody.appendChild(trElem);
     }
@@ -306,7 +348,7 @@ export const DisplayHandler = (() => {
         projTitleElem.setCustomValidity('Please give your item a title');
         projTitleElem.reportValidity();
         return;
-      } else if (projDueDateElem.validity.valueMissing &&
+      } else if (projDueDateElem.value === '' &&
         (createEditFormSubmitButton.dataset.submittype === 'create-todo' || 
         createEditFormSubmitButton.dataset.submittype === 'edit-todo')) {
         projDueDateElem.setCustomValidity('Please give your todo a due date');
@@ -367,12 +409,23 @@ export const DisplayHandler = (() => {
           completed:projCompleted,
         });
         /* CAUTION: Editing newTodoItemObj after next line will edit its actual value in the projectMap */
-        console.log(projID + ' ' + todoItemObj);
         let newTodoItemObj = InformationItemManager.createTodo(projID, todoItemObj);
         /* displayTodos will display all the project's todoItems including the new one 
         because it looks at the projectMap */
         displayTodos(projID, 'due-date-soonest');
+      } else if (createEditFormSubmitButton.dataset.submittype === 'edit-todo') {
+        let todoID = e.currentTarget.dataset.edittodoid;
+        let existingTodoItemObj = InformationItemManager.getTodo(todoID);
+        let projID = existingTodoItemObj.parentProjID;
+        existingTodoItemObj.title = projTitle;
+        existingTodoItemObj.description = projDescription;
+        existingTodoItemObj.dueDate = projDueDate;
+        existingTodoItemObj.priority = projPriority;
+        existingTodoItemObj.notes = projNotes;
+        existingTodoItemObj.completed = projCompleted;
+        displayTodos(projID, 'due-date-soonest');
       }
+
       _displayForm({formStr:'none'});
       
       let createEditForm = document.querySelector('form.create-edit-form');
