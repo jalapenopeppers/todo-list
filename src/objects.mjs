@@ -81,6 +81,7 @@ function TodoItem({title, description = '', dueDate = '', priority = 'low', note
   this._creationDate = new Date();
 
   this._todoID = '';
+  this._parentProjID = '';
 }
 // Set TodoItem's prototype to be the object with all the methods +
 //   some additional methods to deal with todoID
@@ -92,6 +93,15 @@ TodoItem.prototype = Object.create(infoItemMethods, {
     },
     set(newTodoID) {
       this._todoID = newTodoID;
+    }, 
+  },
+  parentProjID: {
+    configurable: false,
+    get() {
+      return this._parentProjID;
+    },
+    set(newParentProjID) {
+      this._parentProjID = newParentProjID;
     }, 
   },
 });

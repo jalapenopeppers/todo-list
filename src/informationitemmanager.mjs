@@ -39,9 +39,11 @@ export const InformationItemManager = (() => {
   };
   const createTodo = (projID, todoItem) => {
     todoItem.todoID = 'todo' + todoCounter;
+    todoItem.parentProjID = projID;
     todoCounter++;
 
     projectMap.get(projID).get('todoItems').set(todoItem.todoID, todoItem);
+    return todoItem;
   };
   const deleteTodo = (todoID) => {
     projectMap.forEach((value, key) => {
@@ -64,6 +66,7 @@ export const InformationItemManager = (() => {
         };
       };
     });
+    tempTodoItem.parentProjID = targetProjID;
     projectMap.get(targetProjID).get('todoItems').set(todoID, tempTodoItem);
   };
   const getTodos = (todoCategoryTypeStr = 'all', todoSortStr = 'creation-date') => {
