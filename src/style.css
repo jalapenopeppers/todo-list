@@ -321,6 +321,12 @@ li.project.completed::before {
   grid-template-rows: min-content; */
 }
 
+div.no-todos-message {
+  justify-self: center;
+  font-size: 24px;
+  text-align: center;
+}
+
 table {
   width: 100%;
   border-collapse: collapse;

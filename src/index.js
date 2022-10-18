@@ -25,14 +25,14 @@ const addTodoElem = document.querySelector('.add-todo-button-icon');
 addTodoElem.setAttribute('src', AddIcon);
 const addProjectElem = document.querySelector('.add-project-button-icon');
 addProjectElem.setAttribute('src', AddIcon);
-const editProjectElem = document.querySelector('.edit-project-button-icon');
-editProjectElem.setAttribute('src', EditIcon);
-const deleteProjectElem = document.querySelector('.delete-project-button-icon');
-deleteProjectElem.setAttribute('src', DeleteIcon);
-const moveTodoElem = document.querySelector('.todo-item-edit-button-icon');
-moveTodoElem.setAttribute('src', MoveIcon);
-const deleteTodoElem = document.querySelector('.todo-item-delete-button-icon');
-deleteTodoElem.setAttribute('src', DeleteIcon);
+// const editProjectElem = document.querySelector('.edit-project-button-icon');
+// editProjectElem.setAttribute('src', EditIcon);
+// const deleteProjectElem = document.querySelector('.delete-project-button-icon');
+// deleteProjectElem.setAttribute('src', DeleteIcon);
+// const moveTodoElem = document.querySelector('.todo-item-move-button-icon');
+// moveTodoElem.setAttribute('src', MoveIcon);
+// const deleteTodoElem = document.querySelector('.todo-item-delete-button-icon');
+// deleteTodoElem.setAttribute('src', DeleteIcon);
 
 // Clock functionality
 const clockElement = document.querySelector('.datetime-container');
@@ -43,5 +43,4 @@ function clock() {
 clock();
 setInterval(clock, 1000);
 
-// DisplayHandler.displayProjects();
-DisplayHandler.attachStaticEventHandlers();
+DisplayHandler.setupDisplay();

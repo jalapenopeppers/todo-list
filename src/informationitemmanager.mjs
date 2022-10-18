@@ -173,14 +173,14 @@ export const InformationItemManager = (() => {
   };
   const getTodo = (todoID) => {
     let todoObj = {};
-    projectMap.forEach((value, key) => {
+    for (let [key, value] of projectMap) {
       todoObj = value.get('todoItems').get(todoID);
       if (todoObj !== undefined) {
         if (todoObj.todoID === todoID) {
-          return undefined; // normal return value for .forEach
+          break;
         };
       };
-    });
+    }
     return todoObj;
   };
 

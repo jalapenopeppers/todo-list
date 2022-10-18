@@ -117,6 +117,28 @@ export const DisplayHandler = (() => {
       formPlacementGrid.style.display = 'grid';
       createEditForm.style.display = 'none';
       moveTodoForm.style.display = 'grid';
+      console.log(`TodoID: ${todoID}`);
+      let todoItem = InformationItemManager.getTodo(todoID);
+      let submitButton = document.querySelector('form.move-todo-form button.submit-form-button');
+      submitButton.dataset.sourcetodoid = todoID;
+      let parentProjectItem = InformationItemManager.getProject(projID);
+      let moveTodoTitle  = document.querySelector('.todo-preview>.todo-preview-title');
+      moveTodoTitle.textContent = `Title: ${todoItem.title}`;
+      let moveTodoDueDate = document.querySelector('.todo-preview>.todo-preview-due-date');
+      moveTodoDueDate.textContent = `Due: ${format(todoItem.dueDate, 'L/d/yy')}`;
+      let fromProjectTitle = document.querySelector('.move-todo-from-project');
+      fromProjectTitle.textContent = parentProjectItem.title;
+      let projectsArray = InformationItemManager.getProjects();
+      let selectElem = document.querySelector('select.move-todo-projects');
+      selectElem.innerHTML = ''; // Clear previous options
+      for (let project of projectsArray) {
+        if (project.projID !== parentProjectItem.projID) {
+          let optionElem = document.createElement('option');
+          optionElem.setAttribute('value', project.projID);
+          optionElem.textContent = project.title;
+          selectElem.appendChild(optionElem);
+        }
+      }
     } else if (formStr === 'none') {
       let requiredProjTitleInput = document.querySelector('form.create-edit-form input#title');
       requiredProjTitleInput.required = false; // Doing this avoids a browser error when it tries to validate a hidden element
@@ -215,11 +237,29 @@ export const DisplayHandler = (() => {
     todoItemsTbody.innerHTML = '';
 
     let todosArray = InformationItemManager.getTodos(todoCategoryTypeStr, todoSortStr);
+    let noTodosElem = document.querySelector('div.no-todos-message');
+    if (todosArray.length === 0 && noTodosElem === null) {
+      console.log(noTodosElem);
+      let noTodosText = document.createElement('div');
+      noTodosText.textContent = `You don't have any todos here yet!`;
+      noTodosText.className = 'no-todos-message';
+      let secondLine = document.createElement('div');
+      secondLine.textContent = `If you don't have a project yet, make one on the sidebar.`;
+      noTodosText.appendChild(secondLine);
+      let thirdLine = document.createElement('div');
+      thirdLine.textContent = `If you have a project already, add some todos using the button above!`;
+      noTodosText.appendChild(thirdLine);
+      let mainContent = document.querySelector('div.main-content');
+      mainContent.appendChild(noTodosText);
+    } else if (todosArray.length !== 0 && noTodosElem !== null) {
+      noTodosElem.remove();
+    }
     for (let todoItem of todosArray) {
       let trElem = document.createElement('tr');
       trElem.className = 'todo-item';
       trElem.dataset.todoid = todoItem.todoID;
       trElem.addEventListener('click', (e) => {
+        console.log('edit todo activated');
         _displayForm({formStr:'edit todo form',projID:todoItem.parentProjID,todoID:todoItem.todoID});
         _autofillTodoInfo(todoItem.todoID);
       });
@@ -228,6 +268,22 @@ export const DisplayHandler = (() => {
       let inputCheckBoxElem = document.createElement('input');
       inputCheckBoxElem.setAttribute('type', 'checkbox');
       inputCheckBoxElem.className = 'todo-item-checkbox';
+      if (todoItem.completed === true) {
+        inputCheckBoxElem.checked = true;
+        trElem.classList.add('completed');
+      }
+      inputCheckBoxElem.addEventListener('click', (e) => {
+        let todoID = e.currentTarget.parentNode.parentNode.dataset.todoid;
+        let todoItem = InformationItemManager.getTodo(todoID);
+        if (e.currentTarget.parentNode.parentNode.classList.toggle('completed')) {
+          // Todo is completed, update internally
+          todoItem.completed = true;
+        } else {
+          // Todo is NOT completed, update internally
+          todoItem.completed = false;
+        }
+        e.stopPropagation();
+      });
       tdCheckBoxElem.appendChild(inputCheckBoxElem);
       trElem.appendChild(tdCheckBoxElem);
 
@@ -265,7 +321,12 @@ export const DisplayHandler = (() => {
         <img class="todo-item-move-button-icon" src="${MoveIcon}" alt="Move todo button">
       `;
       tdMoveButtonElem.addEventListener('click', (e) => {
-        // CONTINUE
+        _displayForm({
+          formStr:'move todo form',
+          projID:todoItem.parentProjID,
+          todoID:e.currentTarget.parentNode.dataset.todoid
+        });
+        e.stopPropagation();
       });
       trElem.appendChild(tdMoveButtonElem);
 
@@ -275,7 +336,10 @@ export const DisplayHandler = (() => {
         <img class="todo-item-delete-button-icon" src="${DeleteIcon}" alt="Delete todo button">
       `;
       tdDeleteButtonElem.addEventListener('click', (e) => {
-        // CONTINUE
+        let todoID = e.currentTarget.parentNode.dataset.todoid;
+        InformationItemManager.deleteTodo(todoID); // Delete from projectMap
+        e.stopPropagation();
+        e.currentTarget.parentNode.remove();
       });
       trElem.appendChild(tdDeleteButtonElem);
 
@@ -438,11 +502,30 @@ export const DisplayHandler = (() => {
       let moveTodoForm = document.querySelector('form.move-todo-form');
       moveTodoForm.reset(); // resets form to default values
     });
-  }
+
+    let moveTodoSubmitButton = document.querySelector('form.move-todo-form button.submit-form-button');
+    moveTodoSubmitButton.addEventListener('click', (e) => {
+      let todoID = e.currentTarget.dataset.sourcetodoid;
+      let targetProjectSelectElem = document.querySelector('select.move-todo-projects');
+      InformationItemManager.moveTodo(todoID, targetProjectSelectElem.value);
+      let moveTodoForm = document.querySelector('form.move-todo-form');
+      moveTodoForm.reset(); // resets form to default values
+      let todoItemElem = document.querySelector(`tr.todo-item[data-todoid="${todoID}"]`);
+      todoItemElem.remove(); // Remove from DOM to preseve todo order
+      todoID = '';
+      _displayForm({formStr:'none'});
+    });
+  };
+  const setupDisplay = () => {
+    attachStaticEventHandlers();
+    let allButton = document.querySelector('.button.all-button');
+    allButton.dispatchEvent(new Event('click'));
+  };
 
   return {
     displayTodos,
     displayProjects,
     attachStaticEventHandlers,
+    setupDisplay,
   };
 })();
