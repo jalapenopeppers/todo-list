@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="main.js" defer></script>
+  <title>Todo-List</title>
+</head>
+<body>
+  <div class="content">
+    <div class="create-edit-form-placement-grid">
+      <div class="create-edit-form-container">
+        <form class="create-edit-form">
+          <legend class="form-title">Create Project</legend>
+          <label for="title" class="form-section">Title: *
+            <input type="text" id="title" name="title" required>
+          </label>
+          <label for="description" class="form-section">Description:
+            <input type="text" id="description" name="description">
+          </label>
+          <label for="due-date" class="form-section">Due Date:
+            <input type="datetime-local" id="due-date" name="due-date">
+          </label>
+          <label for="priority" class="form-section">Priority:
+            <select name="priority" id="priority">
+              <option value="low">Low</option>
+              <option value="med">Medium</option>
+              <option value="high">High</option>
+            </select>
+          </label>
+          <label for="notes" class="form-section">Notes:
+            <textarea id="notes">
+            </textarea>
+          </label>
+          <label for="completed">Completed:
+            <input type="checkbox" id="completed" name="completed">
+          </label>
+          <div class="form-buttons-container">
+            <button type="button" class="cancel-form-button">Cancel</button>
+            <button type="button" class="submit-form-button">Create</button>
+          </div>
+        </form>
+        <form class="move-todo-form">
+          <legend class="form-title">Move Todo</legend>
+          <div class="todo-preview">
+            <div class="todo-preview-title">Title: Temp...</div>
+            <div class="todo-preview-due-date">Due: 10/9/22</div>
+          </div>
+          <h1 class="form-subtitle">From:</h1>
+          <div class="move-todo-from-project">Project 1</div>
+          <h1 class="form-subtitle">To:</h1>
+          <div class="move-todo-projects-container">
+            <!-- <ul>
+              <li class="move-todo-project">Project 2</li>
+              <li class="move-todo-project">Project 3</li>
+              <li class="move-todo-project">Project 4</li>
+            </ul> -->
+            <select name="move-todo-projects" class="move-todo-projects" id="move-todo-project-select" required>
+              <!-- <option value="proj1">Project 2</option>
+              <option value="proj2">Project 3</option>
+              <option value="proj3">Project 4</option> -->
+            </select>
+          </div>
+          <div class="form-buttons-container">
+            <button type="button" class="cancel-form-button">Cancel</button>
+            <button type="button" class="submit-form-button">Submit Changes</button>
+          </div>
+        </form>
+      </div>
+    </div>
+    <div class="header">
+      <div class="title-logo-container">
+        <img class="header-logo" src="" alt="Clipboard logo">
+        <div class="header-title">Check-It</div>
+      </div>
+      <div id="header-clock" class="datetime-container"></div>
+      <div class="theme-toggle-container">
+        
+      </div>
+    </div>
+    <div class="sidebar">
+      <div class="sidebar-main-buttons">
+        <div class="button all-button">All</div>
+        <div class="button today-button">Today</div>
+        <div class="button this-week-button">This Week</div>
+        <div class="button important-button">Important</div>
+        <div class="button completed-button">Completed</div>
+        <div class="projects">
+          <div class="projects-header">
+            <div class="projects-header-text">Projects:</div>
+            <div class="add-project-button">
+              <img class="add-project-button-icon" src="" alt="Add project button">
+            </div>
+          </div>
+          <ul class="projects-container">
+            <!-- <li class="project">
+              <div class="button project-text">Project 1</div>
+              <div class="project-subbuttons">
+                <div class="complete-project-button">
+                  <input type="checkbox" class="complete-project-button">
+                </div>
+                <div class="edit-project-button">
+                  <img class="edit-project-button-icon" src="" alt="Edit project button">
+                </div>
+                <div class="delete-project-button">
+                  <img class="delete-project-button-icon" src="" alt="Delete project button">
+                </div>
+              </div>
+            </li>
+            <li class="button project">Project 2</li> -->
+          </ul>
+        </div>
+      </div>
+      <div class="credits-footer">
+        <div class="footer-text">Made By: Jalapenopeppers</div>
+        <a class="github-link" href="https://github.com/jalapenopeppers/todo-list">
+          <img class="github-logo" src="" alt="Github Logo">
+        </a>
+      </div>
+    </div>
+    <div class="main-content">
+      <div class="main-content-top-row">
+        <div class="current-category-text">-</div>
+        <div class="add-todo-button">
+          <img class="add-todo-button-icon" src="" alt="Add todo button">
+        </div>
+      </div>
+      <table class="todo-items-container">
+        <thead class="todo-items-category-titles">
+          <th class="completed-title">Completed:</th>
+          <th class="due-date-title">Due Date:</th>
+          <th class="title-title">Title:</th>
+          <th class="priority-title">Priority:</th>
+          <th class="creation-date-title">Date Added:</th>
+          <th class="todo-buttons-empty-col"></th>
+          <th class="todo-buttons-empty-col"></th>
+        </thead>
+        <tbody class="todo-items">
+          <!-- <tr class="todo-item">
+            <td><input type="checkbox" class="todo-item-checkbox"></td>
+            <td class="due-date">10/9/22</td>
+            <td class="title">Eat crap ajsdqfw v wdacq af cwdsv sdv c sd</td>
+            <td class="priority priority-low">Low</td>
+            <td class="creation-date">10/8/22</td>
+            <td class="todo-item-move-button">
+              <img class="todo-item-move-button-icon" src="" alt="Edit todo button">
+            </td>
+            <td class="todo-item-delete-button">
+              <img class="todo-item-delete-button-icon" src="" alt="Delete todo button">
+            </td>
+          </tr>
+          <tr class="todo-item">
+            <td><input type="checkbox" class="todo-item-checkbox"></td>
+            <td class="due-date">10/9/22</td>
+            <td class="title">Eat crap</td>
+            <td class="priority priority-med">Medium</td>
+            <td class="creation-date">10/8/22</td>
+          </tr>
+          <tr class="todo-item completed">
+            <td><input type="checkbox" class="todo-item-checkbox"></td>
+            <td class="due-date">10/9/22</td>
+            <td class="title">Eat crap</td>
+            <td class="priority priority-high">High</td>
+            <td class="creation-date">10/8/22</td>
+          </tr> -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+</body>
+</html>
