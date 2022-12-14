@@ -149,14 +149,17 @@ export const DisplayHandler = (() => {
   };
 
   const displayProjects = () => {
-    _projectContainerElem.innerHTML = '';
+    const projectContainerElem = document.querySelector('.projects-container');
+    projectContainerElem.innerHTML = '';
     let projectsArray = InformationItemManager.getProjects();
     console.log(projectsArray);
     for (let projectItem of projectsArray) {
-      let projectElem = document.createElement('li');
-      projectElem.className = 'button project';
-      projectElem.textContent = projectItem.title;
-      _projectContainerElem.appendChild(projectElem);
+      // let projectElem = document.createElement('li');
+      // projectElem.className = 'button project';
+      // projectElem.textContent = projectItem.title;
+      // console.log(projectItem.title);
+      // projectContainerElem.appendChild(projectElem);
+      createProject(projectItem);
     }
   };
   const createProject = (projectItemObj) => {

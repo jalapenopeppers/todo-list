@@ -1,6 +1,5 @@
 {
   "name": "todo-list",
-  
   "version": "1.0.0",
   "description": "A larger project featuring a complete todo list application. Developed to practice the following concepts: - Factory functions - IIFE Modules - Npm and webpack - ES6 Modules - OOP princples (ie SOLID, etc) - Loosely coupled objects",
   "main": "index.js",
@@ -28,6 +27,7 @@
     "webpack-dev-server": "^4.11.1"
   },
   "dependencies": {
-    "date-fns": "^2.29.3"
+    "date-fns": "^2.29.3",
+    "firebase": "^9.15.0"
   }
 }

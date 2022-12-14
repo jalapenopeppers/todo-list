@@ -44,3 +44,6 @@ clock();
 setInterval(clock, 1000);
 
 DisplayHandler.setupDisplay();
+
+InformationItemManager._retrieveFireStoreProjectMap();
+// DisplayHandler.displayProjects();
