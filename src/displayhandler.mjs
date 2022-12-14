@@ -80,6 +80,8 @@ export const DisplayHandler = (() => {
       submitFormButton.textContent = 'Edit';
       submitFormButton.dataset.submittype = 'edit-project';
       submitFormButton.dataset.editprojid = projID; // For use by submit button event handler
+
+      InformationItemManager.updateFirestoreProjectMap();
     } else if (formStr === 'create todo form') {
       //Check if a project is selected. If not, tell the user to pick a project
       if (projID === '') {
@@ -113,6 +115,8 @@ export const DisplayHandler = (() => {
       submitFormButton.dataset.submittype = 'edit-todo';
       submitFormButton.dataset.editprojid = projID;
       submitFormButton.dataset.edittodoid = todoID;
+
+      InformationItemManager.updateFirestoreProjectMap();
     } else if (formStr === 'move todo form') {
       formPlacementGrid.style.display = 'grid';
       createEditForm.style.display = 'none';

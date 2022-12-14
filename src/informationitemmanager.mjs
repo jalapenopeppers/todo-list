@@ -61,26 +61,8 @@ export const InformationItemManager = (() => {
     }
     return value;
   }
-  // Updates Firestore with new projectMap
-  async function _updateFirestoreProjectMap () {
-    let stringifiedPM = JSON.stringify(projectMap, _pmReplacer);
-    // Remove underscores because stringify is adding them idk why
-    stringifiedPM = stringifiedPM.replace(/_/g, '');
-    // If there is no projectMap already on firestore, make a new one
-    // If there is, just update it
-    try {
-      const pmUpdateDocRef = await updateDoc(pmDocRef, {stringifiedPM});
-      const countersUpdateDocRef = await updateDoc(countersDocRef, {
-        projectCounter,
-        todoCounter
-      });
-      console.log("Documents updated");
-    } catch (e) {
-    console.error("Error adding document: ", e);
-    }
-  }
   // Retrieves projectMap from fireStore and saves it to local projectMap variable
-  async function _retrieveFireStoreProjectMap () {
+  async function retrieveFireStoreProjectMap () {
     try {
       const querySnapshot = await getDoc(pmDocRef);
       const stringifiedPM = querySnapshot.data().stringifiedPM;
@@ -124,7 +106,24 @@ export const InformationItemManager = (() => {
       console.error("Error retrieving projectMap: ", e);
     }
   }
-
+  // Updates Firestore with new projectMap
+  async function updateFirestoreProjectMap () {
+    let stringifiedPM = JSON.stringify(projectMap, _pmReplacer);
+    // Remove underscores because stringify is adding them idk why
+    stringifiedPM = stringifiedPM.replace(/_/g, '');
+    // If there is no projectMap already on firestore, make a new one
+    // If there is, just update it
+    try {
+      const pmUpdateDocRef = await updateDoc(pmDocRef, {stringifiedPM});
+      const countersUpdateDocRef = await updateDoc(countersDocRef, {
+        projectCounter,
+        todoCounter
+      });
+      console.log("Documents updated");
+    } catch (e) {
+    console.error("Error adding document: ", e);
+    }
+  }
   const createProject = (projectItem) => {
     projectItem.projID = 'proj' + projectCounter;
     projectCounter++;
@@ -134,12 +133,12 @@ export const InformationItemManager = (() => {
     singleProjectMap.set('todoItems', new Map());
     projectMap.set(projectItem.projID, singleProjectMap);
 
-    _updateFirestoreProjectMap();
+    updateFirestoreProjectMap();
     return projectItem;
   };
   const deleteProject = (projID) => {
     projectMap.delete(projID);
-    _updateFirestoreProjectMap();
+    updateFirestoreProjectMap();
   };
   const getProjects = () => {
     let projectObjArray = [];
@@ -164,7 +163,7 @@ export const InformationItemManager = (() => {
     todoCounter++;
 
     projectMap.get(projID).get('todoItems').set(todoItem.todoID, todoItem);
-    _updateFirestoreProjectMap();
+    updateFirestoreProjectMap();
     return todoItem;
   };
   const deleteTodo = (todoID) => {
@@ -175,7 +174,7 @@ export const InformationItemManager = (() => {
         return undefined; // normal return value for .forEach
       };
     });
-    _updateFirestoreProjectMap();
+    updateFirestoreProjectMap();
   };
   const moveTodo = (todoID, targetProjID) => {
     let tempTodoItem = {};
@@ -191,7 +190,7 @@ export const InformationItemManager = (() => {
     });
     tempTodoItem.parentProjID = targetProjID;
     projectMap.get(targetProjID).get('todoItems').set(todoID, tempTodoItem);
-    _updateFirestoreProjectMap();
+    updateFirestoreProjectMap();
   };
   const getTodos = (todoCategoryTypeStr = 'all', todoSortStr = 'creation-date') => {
     let todoItemsArray = [];
@@ -318,7 +317,8 @@ export const InformationItemManager = (() => {
     moveTodo,
     getTodos,
     getTodo,
-    _retrieveFireStoreProjectMap,
+    retrieveFireStoreProjectMap,
+    updateFirestoreProjectMap,
   };
 })();
 
